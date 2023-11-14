@@ -1,7 +1,8 @@
 import { Route, Routes } from "react-router-dom"
 import Layout from "../src/Layout"
 import IndexPage from "./pages/IndexPage";
-import Login from "./pages/Login";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 
 
@@ -10,7 +11,8 @@ export default function App() {
     <Routes>
       <Route path="/" element = {<Layout/>} >
           <Route index element = {<IndexPage/>} />
-          <Route path="/login" element = {<Login/>} />
+          <Route path="/login" element = {<LoginPage/>} />
+          <Route path="/register" element = {<RegisterPage/>} />
       </Route>
 
     </Routes>
