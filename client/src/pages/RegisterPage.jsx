@@ -10,10 +10,22 @@ const RegisterPage = () => {
            const [email,setEmail]= useState('');
            const [password,setPassword]= useState('');
 
-           function RegisterUser(ev){
-            ev.preventdefault();  
-              axios.get('http://localhost:4000/test');
+           async function registerUser(ev){
+           await ev.preventDefault();  
+             try{
+                axios.post('/register' ,{
+                  email,
+                  name,
+                  password,
+                });
+                alert('Registration Successful! Now you can log in.');
+             }
+             catch (e){
+              alert('Registration failed. Please try again later.');
+             }
            }
+
+
   return (
     
     <div className='flex mt-4 grow items-center justify-around '>
@@ -21,7 +33,7 @@ const RegisterPage = () => {
               <h1 className=' text-3xl font-semibold text-center mb-4  '>Register</h1>
               
               {/*  on Submit, the form will trigger the RegisterUser function */}
-              <form className=' max-w-sm m-auto text-sm' onSubmit={RegisterUser}> 
+              <form className=' max-w-sm m-auto text-sm' onSubmit={registerUser}> 
 
                 <input type="text" 
                         placeholder='Nikhil Yadav' 
