@@ -10,11 +10,14 @@ const User = require('./models/user') // access the model or schema we created
 const bcrypt = require('bcryptjs');
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 
 const jwtSecrete = 'shdcnwefi3a2gnskqjdfjdjoijwoifj34' // random secrete string 
 
-//to parse data in json
+//to parse data in json....
 app.use(express.json()); 
+//for reading cookies....
+app.use(cookieParser())
 
 app.use(cors({
     credentials : true,
@@ -28,7 +31,7 @@ mongoose.connect(process.env.MONGO_URL);
 
 
 app.get('/test', (req, res) => {
-    res.json('test successful');
+    res.json('test successfull');
   })
 
 // setting endpoint to grab register info from register form.
@@ -61,7 +64,11 @@ app.post('/register',async (req, res) => {
       if(passOk){
         // password correct, we want to login user , actually, create a JSON webtoken and 
         // respond with a cookie and encrypted username using json webtoken sign method();
-        jwt.sign({email: userDoc.email, id: userDoc._id},jwtSecrete, {}, (err, token) => {
+        jwt.sign({
+            email: userDoc.email,
+            id: userDoc._id,
+            // name : userDoc.name, using other method to grab name i.e. by  findById() method in /profile route directly.
+          },jwtSecrete, {}, (err, token) => {
           if(err) throw err;
           //otherwise respond with a token
           res.cookie('token', token).json(userDoc);
@@ -74,6 +81,29 @@ app.post('/register',async (req, res) => {
     }
   })
 
+
+  app.get('/profile', (req,res) => {
+    //check if there is a header request cookie sent or not. if yes then continue...
+    //..grab the token from the response.cookies
+    const {token} = req.cookies;
+    //check if we have token, then  we try to decrypt the token with our saltkey, otherwise throw null
+    if(token){
+      jwt.verify(token,jwtSecrete,{}, async(err, cookieData) =>{
+        if(err) throw err;
+        const {name, email,id} = await User.findById(cookieData.id)
+      //  res.json(cookieData)  // responding with 'user' data in json format,  which we have here in jwt.sign() i.e. email, id .
+       //Now we will go to userContext and grab the data from the response.
+
+       res.json({name, email, id}); // updating above code: sending only name, email,id as object. ***Vide: 1:47:40 ***
+      });
+    }else {
+      res.json(null);
+    }
+  })
+
+  // app.get('/account', (req,res) => {
+  //   res.json('account details');
+  // })
 
   app.listen(4000);
  
