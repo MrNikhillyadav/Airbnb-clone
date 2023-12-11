@@ -101,9 +101,10 @@ app.post('/register',async (req, res) => {
     }
   })
 
-  // app.get('/account', (req,res) => {
-  //   res.json('account details');
-  // })
+  //note there is the post request for logout.
+  app.post('/logout', (req,res) => {
+    res.cookie('token', '').json(true);
+  })
 
   app.listen(4000);
  

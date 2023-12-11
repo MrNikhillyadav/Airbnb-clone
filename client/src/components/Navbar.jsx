@@ -13,12 +13,12 @@ const Navbar = () => {
     <div className='Navbar w-full h-2vh text-[16px] font-semibold  text-gray-700 mt-4 '>
         <div className=' bg-white  m-auto flex justify-between  items-center '>
 
-        <Link to = {'/'} className='text-[#FF395D] font-bold text-lg flex  gap-2 justify-center items-center'>
+        <Link to = {'/'} className='text-[#ff395d] font-bold text-lg flex  gap-2 justify-center items-center'>
             <span className='dropshadow-lg text-4xl'><SiValorant/></span>
             <span >ValoShop</span>
         </Link>
 
-        <ul className=' flex  items-center justify-around border border-gray-600 shadow-md px-10 py-2 rounded-full   gap-10'>
+        <ul className=' flex  items-center justify-around border mb-4 shadow-md px-10 py-2 rounded-full   gap-10'>
             <li><a href="#">MEN</a></li>
             <li><a href="#">WOMEN</a></li>
             <li><a href="#">KIDS</a></li>

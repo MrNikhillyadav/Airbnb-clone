@@ -11,4 +11,4 @@ const UserSchema = new Schema({
   const UserModel = mongoose.model('User', UserSchema);
 
   module.exports = UserModel;
-  // is usermodel ko hum index.js me use kr skte hai ab.
+// is usermodel ko hum index.js me use kr skte hai ab.
