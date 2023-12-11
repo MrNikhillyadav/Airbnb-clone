@@ -23,9 +23,7 @@ const PlacesPage = () => {
           {action === 'new' && (
             <div>
               <form >
-                      <h2 className='text-lg mt-4'>Title</h2>
-                      <p className='text-xs text-gray-500'>Title should be short and catchy.</p>
-                      <input type="text" placeholder='title, for example: my family home' />
+                      
                       <h2 className='text-lg mt-4'>Address</h2>
                       <p className='text-xs text-gray-500'>Address to this place.</p>
                       <input type="text" placeholder='address' />

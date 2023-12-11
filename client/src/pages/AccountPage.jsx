@@ -42,7 +42,7 @@ const AccountPage = () => {
     
 
     function linkClasses(type=null){
-        let classes = " px-4 text-sm inline-flex items-center  gap-1 py-1";
+        let classes = " px-4 text-sm inline-flex items-center  gap-2 py-1";
         if((type === subpage ) ){ 
             classes += ' bg-[#FF395D] text-white  rounded-full';   //!!!!space before class is super important.
             //spacing before bg-[#FF395D] ensures that there is a space before the new class, making it a separate class.
@@ -60,15 +60,15 @@ const AccountPage = () => {
         <nav className=' w-full mt-4  items-center flex justify-center gap-2'>
             <Link  className={linkClasses('profile')} to={'/account'}>
                 <MdAccountCircle className='text-center' />
-                My Profile
+               <div className='text-[14px]'>My Profile</div> 
             </Link>
             <Link className={linkClasses('bookings')} to={'/account/bookings'}>
                 <LuClipboardList />
-                My bookings
+                <div className='text-[14px]'>My Bookings</div> 
             </Link>
             <Link className={linkClasses('places')} to={'/account/places'}>
                 <SiHomeassistantcommunitystore />
-                My accomodations
+                <div className='text-[14px]'>My Accomodation</div> 
             </Link>
         </nav>
 
