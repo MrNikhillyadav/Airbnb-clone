@@ -29,26 +29,29 @@ const RegisterPage = () => {
   return (
     
     <div className='flex mt-4 grow items-center justify-around '>
-        <div className='mb-[22vh]'>
+        <div className='mb-[22vh]  p-16 border-gray-900 bg-gray-200 shadow-lg rounded-2xl'>
               <h1 className=' text-3xl font-semibold text-center mb-4  '>Register</h1>
               
               {/*  on Submit, the form will trigger the RegisterUser function */}
               <form className=' max-w-sm m-auto text-sm' onSubmit={registerUser}> 
 
                 <input type="text" 
-                        placeholder='Nikhil Yadav' 
+                        placeholder='name' 
+                        className='shadow-md border-none'
                         value={name} //giving value so that we can use it in useState
                         onChange={ev=> setName(ev.target.value)} />
                 <input type="email" 
-                        placeholder='your @email'
+                        placeholder=' @email'
+                        className='shadow-md border-none'
                         value={email}
                         onChange={ev => setEmail(ev.target.value)} />
                 <input type="password"
-                         placeholder='your password' 
+                         placeholder='password' 
+                         className='shadow-md border-none'
                          value={password}
                         onChange={ev => setPassword(ev.target.value)}/>
 
-                <button className='primary'>Register</button>
+                <button className='primary mt-2 shadow-lg'>Register</button>
 
                 <div className='text-center text-[16px] '>
                   Already have an account ?  

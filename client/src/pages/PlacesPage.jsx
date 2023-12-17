@@ -2,14 +2,14 @@ import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { IoAdd } from "react-icons/io5";
 import { AiOutlineCloudUpload } from "react-icons/ai";
-import { FaWifi, FaDog, FaBath,FaParking } from "react-icons/fa";
-import { TbAirConditioning } from "react-icons/tb";
-import { PiTelevisionSimpleFill } from "react-icons/pi";
-import { MdRadio } from "react-icons/md";
+import Perks from '../components/Perks';
+import axios from 'axios';
 
 const PlacesPage = () => {
   const {action} = useParams();
-  console.log(action);
+  // console.log(action);
+
+  //Setting up the states for the form.
   const [title, setTitle] = useState('');
   const [address, setAddress] = useState('');
   const [addedPhotos, setAddedPhotos] = useState([]);
@@ -21,6 +21,34 @@ const PlacesPage = () => {
   const [checkOut, setCheckOut] = useState('');
   const [maxGuests, setMaxGuests] = useState(1);
 
+// same code repeat hora tha jada to function bana diya h
+  function inputHeder(text){
+    return(<h2 className='text-lg mt-4'>{text}</h2>)  
+  }
+
+  function inputDescription(text){
+    return( <p className='text-xs text-gray-500'>{text}</p>)   
+  }
+
+  function preInput(header, description){
+    return(
+          <>
+            {inputHeder(header)}
+            {inputDescription(description)}
+          </>
+          )
+  }
+
+  async function addPhotoByLink(ev){          // it will upload the link to the server and it will
+    ev.preventDefault();
+   const {data : filename} = await axios.post('/upload-by-link', {link : photoLink}); //{data : filename} to rename file name to 'filename'. 
+   //Now we can use setPhoto state to return previous photolinks with the latest filename.
+   setAddedPhotos(prev =>{
+    return [...prev, filename];   // means array of all the previous values with filename.
+   })
+   setPhotoLink('');
+  }
+  
   return (
     <div>
         {/* if 'new' nahi h to add new place option. Agar new hai to form aayega. */}
@@ -37,92 +65,63 @@ const PlacesPage = () => {
           {/* 'new' hai to show the form to add new place */}
           {action === 'new' && (
             <div>
+              {/* Input form */}
               <form >
+                      {preInput('Title', 'Title of the place')}
+                        <input type="text" value={title} onChange={ev=> setTitle(ev.target.value)}  placeholder='family apartment' />
+
+                      {preInput('Address', 'Address to this place.')}
+                        <input type="text" value={address} onChange={ev=> setAddress(ev.target.value)}  placeholder='address' />
+
+                      {preInput('Photos' ,"more = better")}
+                        <div className='text-xs flex gap-2 text-gray-500'>
+                              <input type="text" value={photoLink} onChange={ev=> setPhotoLink(ev.target.value)} placeholder='add using link ... pngs , jpg  ' />
+                              <button onClick={addPhotoByLink} className='bg-gray-200 px-12 shadow-md rounded-full' >  Add&nbsp;photos</button>
+                        </div>
+
+                      <div className='grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-6 mt-2 '>
+                          {addedPhotos.length > 0 && addedPhotos.map(link =>(
+                                <div className='flex items-center mt-4 justify-center text-xs border border-gray-300 rounded-lg'>
+                                  <img  src={'http://localhost:400/uploads/'+link}  />
+                              </div>
+                          ))}
+                            <button className='border border-gray-300 text-gray-700 flex justify-center gap-1 text-gray- p-8 text-xs mt-4  bg-white'>
+                              <AiOutlineCloudUpload className='text-xl' />
+                              Upload 
+                            </button>
+                      </div>
+
+                      {preInput('Description', 'description to this place')}
+                      <textarea className='py-8 rounded-md' value={description} onChange={ev=> setDescription(ev.target.value)}/>
+
                       
-                      <h2 className='text-lg mt-4'>Address</h2>
-                      <p className='text-xs text-gray-500'>Address to this place.</p>
-                      <input type="text"  placeholder='address' />
-                      <h2  className='text-lg mt-4' >Photos</h2>
-                      <p className='text-xs text-gray-500'>more = better</p>
-                      <div className='text-xs flex gap-2 text-gray-500'>
-                          <input type="text"  placeholder='add using link ... pngs , jpg  ' />
-                          <button className='bg-gray-200 px-12 shadow-md rounded-full' >  Add&nbsp;photos</button>
-                      </div>
-                      <div className='grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 mt-2 '>
-                          <button className='border border-gray-300 text-gray-700 flex justify-center gap-1 text-gray- p-8 text-xs mt-4  bg-white'>
-                            <AiOutlineCloudUpload className='text-xl' />
-                            Upload 
-                          </button>
-                      </div>
-                      <h2  className='text-lg mt-4' >Description</h2>
-                      <p className='text-xs text-gray-500'>description of the place</p>
-                      <textarea className='py-8 rounded-md' />
+                      {preInput('Perks', 'Select all the perks of your place')}
+                      {/* Building a separate component for the Perks */}
+                        <div className=' gap-2 cursor-pointer mt-2 grid grid-cols-2  md:grid-cols-3 ld:grid-cols-6 '>
+                            <Perks  selected={perks} onChange={setPerks} />
+                        </div>
 
-                      <div >
-                            <h2  className='text-lg mt-4' >Perks</h2>
-                            <p className='text-xs text-gray-500'>Select all the perks of your place</p>
-                            <div className=' gap-2 cursor-pointer mt-2 grid grid-cols-2  md:grid-cols-3 ld:grid-cols-6 '>
+                      {preInput('Extra info', 'home, rules, etc.')}
+                      <textarea value={extraInfo} onChange={ev=> setExtraInfo(ev.target.value)}/>
 
-                                <label className='flex items-center  gap-2  p-4 rounded-md border border-gray-300  justify-center' >
-                                    <input type="checkbox" />
-                                    <span className='text-xs flex items-center gap-1'> <FaWifi className='text-lg' />Free Wifi </span>
-                                </label>
-
-                                <label className='flex items-center gap-2  p-4 rounded-md border border-gray-300 justify-center' >
-                                    <input type="checkbox" />
-                                    <span className='text-xs flex items-center gap-1'>
-                                      <FaDog  className='text-lg'/>Pets allowed</span>
-                                </label>
-
-                                <label className='flex items-center gap-2  p-4 rounded-md border border-gray-300 justify-center' >
-                                    <input type="checkbox" />
-                                    <span className='text-xs flex items-center gap-1'><TbAirConditioning className='text-lg' />Central air conditioning</span>
-                                </label>
-
-                                <label className='flex items-center gap-2  p-4 rounded-md border border-gray-300 justify-center' >
-                                    <input type="checkbox" />
-                                    <span className='text-xs flex items-center gap-1'><FaBath className='text-lg' />Bath service </span>
-                                </label>
-                              
-                                <label className='flex items-center gap-2  p-4 rounded-md border border-gray-300 justify-center' >
-                                    <input type="checkbox" />
-                                    <span className='text-xs flex items-center gap-1'><MdRadio   className='text-lg'/>Radio available</span>
-                                </label>
-
-                                <label className='flex items-center gap-2  p-4 rounded-md border border-gray-300 justify-center' >
-                                    <input type="checkbox" />
-                                    <span className='text-xs flex items-center gap-1'><FaParking  className='text-lg'/>Free Parking spot</span>
-                                </label>
-
-                                <label className='flex items-center gap-2  p-4 rounded-md border border-gray-300 justify-center' >
-                                    <input type="checkbox" />
-                                    <span className='text-xs flex items-center gap-1'><PiTelevisionSimpleFill  className='text-lg'/>TV service</span>
-                                </label>
-                            </div>
+                      {preInput('Check-in&out times','Check in and out times, remember to have some time window between the guest arrivals.')}
+                      {/* CHECK-IN& OUT, Max Guests  div*/}
+                        <div className='grid   gap-4 md:grid-cols-3 sm:grid-cols-2'>
+                              <div >
+                                  <h3 className='text-sm mt-2  -mb-1'>Check-in time</h3>
+                                  <input type="text" value={checkIn} onChange={ev=> setCheckIn(ev.target.value)}  placeholder='6'/>   
+                              </div>
+                              <div>
+                                  <h3 className='text-sm mt-2 -mb-1'>Check-out time</h3>
+                                  <input type="text" value={checkOut} onChange={ev=> setCheckOut(ev.target.value)}  placeholder='7'/>   
+                              </div>
+                              <div>
+                                  <h3 className='text-sm mt-2  -mb-1'>Maximum&nbsp;Number&nbsp;of&nbsp;Guests</h3>
+                                  <input type="number"  value={maxGuests} onChange={ev=> setMaxGuests(ev.target.value)} placeholder='8'  />   
+                              </div>
                       </div>
 
-                      <h2  className='text-lg mt-4' >Extra info</h2>
-                      <p className='text-xs text-gray-500'>home rules, etc.</p>
-                      <textarea/>
-
-                      <h2  className='text-lg mt-4' >Check-in&out times</h2>
-                      <p className='text-xs text-gray-500'>Check in and out times, remember to have some time window between the guest arrivals.</p>
-                      <div className='grid  gap-4 sm:grid-cols-3'>
-                          <div className=''>
-                              <h3 className='text-sm mt-2  -mb-1'>Check-in time</h3>
-                              <input type="text" className='rounded-md' placeholder='14:00'/>   
-                          </div>
-                          <div>
-                              <h3 className='text-sm mt-2 -mb-1'>Check-out time</h3>
-                              <input type="text"  placeholder='16:00'/>   
-                          </div>
-                          <div>
-                              <h3 className='text-sm mt-2 -mb-1'>Maximum Number of Guests</h3>
-                              <input type="text" placeholder='7'  />   
-                          </div>
-                          
-                    
-                      </div>
+                      {/* Save button */}
                       <button className=' mt-6  mx-auto primary'>Save</button>
 
               </form>

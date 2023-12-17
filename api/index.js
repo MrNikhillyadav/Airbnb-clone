@@ -11,6 +11,9 @@ const bcrypt = require('bcryptjs');
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const imageDownloader = require('image-downloader');
+const path = require('path');
+
 
 const jwtSecrete = 'shdcnwefi3a2gnskqjdfjdjoijwoifj34' // random secrete string 
 
@@ -18,6 +21,9 @@ const jwtSecrete = 'shdcnwefi3a2gnskqjdfjdjoijwoifj34' // random secrete string
 app.use(express.json()); 
 //for reading cookies....
 app.use(cookieParser())
+
+//to upload the images in the browser
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(cors({
     credentials : true,
@@ -104,6 +110,20 @@ app.post('/register',async (req, res) => {
   //note there is the post request for logout.
   app.post('/logout', (req,res) => {
     res.cookie('token', '').json(true);
+  })
+
+  // console.log({__dirname});
+  app.post('/upload-by-link', async(req,res) => {
+      //grab the link from the request made to server.We ll use it to upload images into the uploads directory.
+    const {link} = req.body;
+    const newName = 'photo'+ Date.now() + '.jpg';    //date.now() will create random numbers.
+
+    await imageDownloader.image({
+      url: link,
+      dest: path.join(__dirname, 'uploads', newName),   //destination is our uploads directory.
+    })
+    res.json(newName);
+      //Now we can use this endpoint inside placesPage to see if it works.
   })
 
   app.listen(4000);

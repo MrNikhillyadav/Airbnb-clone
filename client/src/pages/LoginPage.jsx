@@ -48,18 +48,18 @@ const LoginPage = () => {
               <form className=' max-w-sm m-auto text-sm' onSubmit={handleLoginUser}>
                 {/* <input type="text" placeholder='User name' /> */}
                 <input type="email" 
-                 className='shadow-md'
-                placeholder='your @email' 
+                 className='shadow-md border-none'
+                placeholder='@email' 
                 value={email}
                 onChange={ev => setEmail(ev.target.value )}/>
 
                 <input type="password"
-                className='shadow-md'
-                 placeholder='your password'
+                className='shadow-md border-none'
+                 placeholder=' password'
                  value={password}
                  onChange={ev => setPassword(ev.target.value)} />
 
-                <button className='primary shadow-md border border-gray-100 mt-2'>
+                <button className='primary shadow-md  border-none mt-2'>
                   Login
                 </button>
 
